@@ -1,0 +1,6 @@
+framework module TTInputVisibilityController {
+  umbrella header "TTInputVisibilityController-umbrella.h"
+
+  export *
+  module * { export * }
+}

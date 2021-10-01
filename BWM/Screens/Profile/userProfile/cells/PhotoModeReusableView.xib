@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoModeReusableView" id="U6b-Vx-4bR" customClass="PhotoModeReusableView" customModule="BWM" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c1t-tg-U2f">
+                    <rect key="frame" x="117.5" y="1" width="85" height="50"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YeR-dP-5vl">
+                            <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="40" id="VBW-DE-uyc"/>
+                            </constraints>
+                            <state key="normal" image="Profile/profileGridViewHL"/>
+                            <connections>
+                                <action selector="onGridButton" destination="U6b-Vx-4bR" eventType="touchUpInside" id="BFn-b2-fka"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8HR-72-0AN">
+                            <rect key="frame" x="45" y="0.0" width="40" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="40" id="xbl-OM-be0"/>
+                            </constraints>
+                            <state key="normal" image="Profile/profileListViewDefault"/>
+                            <connections>
+                                <action selector="onListButton" destination="U6b-Vx-4bR" eventType="touchUpInside" id="NOw-j8-T0c"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKF-cf-P8d">
+                            <rect key="frame" x="42" y="15" width="1" height="20"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="2Yd-Dm-fvQ"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="YeR-dP-5vl" secondAttribute="bottom" id="1bX-5N-IqZ"/>
+                        <constraint firstItem="NKF-cf-P8d" firstAttribute="leading" secondItem="YeR-dP-5vl" secondAttribute="trailing" constant="2" id="9gJ-iz-LXr"/>
+                        <constraint firstItem="YeR-dP-5vl" firstAttribute="leading" secondItem="c1t-tg-U2f" secondAttribute="leading" id="HJk-Hz-qjS"/>
+                        <constraint firstAttribute="trailing" secondItem="8HR-72-0AN" secondAttribute="trailing" id="MKH-V2-eMt"/>
+                        <constraint firstAttribute="bottom" secondItem="NKF-cf-P8d" secondAttribute="bottom" constant="15" id="OjI-wG-XRH"/>
+                        <constraint firstItem="NKF-cf-P8d" firstAttribute="top" secondItem="c1t-tg-U2f" secondAttribute="top" constant="15" id="Xbq-UH-jJK"/>
+                        <constraint firstItem="YeR-dP-5vl" firstAttribute="top" secondItem="c1t-tg-U2f" secondAttribute="top" id="hJh-sa-VcK"/>
+                        <constraint firstAttribute="bottom" secondItem="8HR-72-0AN" secondAttribute="bottom" id="hg0-By-Q58"/>
+                        <constraint firstItem="8HR-72-0AN" firstAttribute="top" secondItem="c1t-tg-U2f" secondAttribute="top" id="i9c-eG-Uaf"/>
+                        <constraint firstItem="8HR-72-0AN" firstAttribute="leading" secondItem="NKF-cf-P8d" secondAttribute="trailing" constant="2" id="xZu-Lb-d09"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xRR-4a-sPJ">
+                    <rect key="frame" x="10" y="0.0" width="300" height="1"/>
+                    <color key="backgroundColor" white="0.90064600480000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="Nmp-Mt-ByU"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="c1t-tg-U2f" firstAttribute="centerX" secondItem="U6b-Vx-4bR" secondAttribute="centerX" id="2oC-J1-3nd"/>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="xRR-4a-sPJ" secondAttribute="trailing" constant="10" id="C6t-eh-ZLg"/>
+                <constraint firstItem="xRR-4a-sPJ" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="Gfn-PT-gAl"/>
+                <constraint firstItem="xRR-4a-sPJ" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="10" id="S0h-ia-Eot"/>
+                <constraint firstAttribute="bottom" secondItem="c1t-tg-U2f" secondAttribute="bottom" id="lX2-h0-d5n"/>
+                <constraint firstItem="c1t-tg-U2f" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" constant="1" id="snJ-wM-D7L"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
+            <connections>
+                <outlet property="buttonGrid" destination="YeR-dP-5vl" id="u9X-gR-bpT"/>
+                <outlet property="buttonList" destination="8HR-72-0AN" id="j2W-UM-Pap"/>
+            </connections>
+            <point key="canvasLocation" x="52.799999999999997" y="48.575712143928037"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="Profile/profileGridViewHL" width="18" height="18"/>
+        <image name="Profile/profileListViewDefault" width="18" height="15"/>
+    </resources>
+</document>
