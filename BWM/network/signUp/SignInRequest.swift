@@ -29,6 +29,10 @@ class SignInRequest: BaseViewController {
                     if success == 200{
                         print("success==",respond)
                         Defaults[.token] = respond.object(forKey: "remember_token") as? String ?? ""
+                        let lat = respond.object(forKey: "latitude") as? String ?? "30.7369"
+                        let long = respond.object(forKey: "longitude") as? String ?? "77.6808"
+                        UserDefaults.standard.setValue(lat, forKey: "lat")
+                        UserDefaults.standard.setValue(long, forKey: "long")
                         print("tokennnnn..\(Defaults[.token] ?? "")")
 //                        Defaults[.liveTracking] = response.result.value!.settings?.tracking == 1
 //                        Defaults[.userIsPro] = response.result.value!.isPro ?? false

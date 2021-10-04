@@ -34,6 +34,7 @@ target 'BWM' do
   pod 'RangeSeekSlider'
   pod 'McPicker'
   pod 'YPImagePicker'
+  pod 'AlamofireImage'
   ###
   pod 'Permission/Camera'
   pod 'Permission/Location'

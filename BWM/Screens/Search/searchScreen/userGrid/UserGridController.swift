@@ -8,6 +8,8 @@
 
 import UIKit
 import Flurry_iOS_SDK
+import Alamofire
+import AlamofireImage
 
 protocol UserGridControllerDelegate: class {
     func didScroll(toTop: Bool)
@@ -16,6 +18,9 @@ protocol UserGridControllerDelegate: class {
 class UserGridController: UICollectionViewController {
 
     weak var delegate: UserGridControllerDelegate?
+
+    let apiUrl = "http://93.188.167.68/projects/event_app/public/api/v1/accounts/nearByUsers"
+    var apiData = [AnyObject]()
     
     private var contentFlowLayout: UserGridLayout = UserGridLayout()
     private var users: [SearchObject] = []
@@ -38,6 +43,7 @@ class UserGridController: UICollectionViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        getUser()
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.collectionView?.delegate = self
@@ -47,6 +53,43 @@ class UserGridController: UICollectionViewController {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.collectionView?.delegate = nil
+    }
+    
+    //  MARK:- API GET USER
+    
+    func getUser(){
+        if Reachability.isConnectedToNetwork(){
+            
+            let lat = UserDefaults.standard.value(forKey: "lat") as? String ?? ""
+            let long = UserDefaults.standard.value(forKey: "long") as? String ?? ""
+            let para: [String:Any] = ["latitude":lat,"longitude":long,"radius":"500"]
+            print(para)
+            Alamofire.request(apiUrl,method: .post,parameters: para,encoding: JSONEncoding.default).responseJSON{ [self]
+                response in
+                switch(response.result){
+                
+                case .success(let json):do{
+                    let success = response.response?.statusCode
+                    let respond = json as! NSDictionary
+                    if success == 200{
+                        print("successs",respond)
+                        apiData = respond.object(forKey: "usersListing") as! [AnyObject]
+                        self.view.isUserInteractionEnabled = true
+                    }else{
+                        self.view.isUserInteractionEnabled = true
+                    }
+                }
+                    
+                case .failure(let error):do{
+                    self.view.isUserInteractionEnabled = true
+                    print("error",error)
+                }
+                
+                }
+            }
+        }else{
+            Alerts.showNoConnectionErrorMessage()
+        }
     }
     
     // MARK: - Public methods
@@ -114,14 +157,29 @@ class UserGridController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return self.sortedUsers.count
-        return image.count
+        apiData.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.userGridCell.identifier, for: indexPath) as! UserGridCell
-        cell.imageAvatar.image = image[indexPath.row]
-        cell.labelFollowersCount.text = follow[indexPath.row]
-        cell.imageVerified.image = verify[indexPath.row]
+        
+        cell.labelFollowersCount.text = self.apiData[indexPath.row]["followers"] as? String ?? "0"
+//        cell.imageVerified.image = verify[indexPath.row]
+        
+        if let image = apiData[indexPath.row]["profile_picture"] as? String{
+          if image != ""{
+                                        DispatchQueue.main.async {
+                                            let url = URL(string: image)
+                                          cell.imageAvatar.af_setImage(withURL: url!)
+                                        }
+          }else{
+            DispatchQueue.main.async {
+                let url = URL(string: "http://93.188.167.68/projects/event_app/public/default.jpgg")
+                cell.imageAvatar.af_setImage(withURL: url!)
+          }
+                            
+    }
+        }
 //        cell.layer.shouldRasterize = true;
 //        cell.layer.rasterizationScale = UIScreen.main.scale
 //

@@ -31,44 +31,8 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.image` struct is generated, and contains static references to 5 images.
+  /// This `R.image` struct is generated, and contains static references to 0 images.
   struct image {
-    /// Image `a`.
-    static let a = Rswift.ImageResource(bundle: R.hostingBundle, name: "a")
-    /// Image `b`.
-    static let b = Rswift.ImageResource(bundle: R.hostingBundle, name: "b")
-    /// Image `c`.
-    static let c = Rswift.ImageResource(bundle: R.hostingBundle, name: "c")
-    /// Image `d`.
-    static let d = Rswift.ImageResource(bundle: R.hostingBundle, name: "d")
-    /// Image `e`.
-    static let e = Rswift.ImageResource(bundle: R.hostingBundle, name: "e")
-    
-    /// `UIImage(named: "a", bundle: ..., traitCollection: ...)`
-    static func a(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.a, compatibleWith: traitCollection)
-    }
-    
-    /// `UIImage(named: "b", bundle: ..., traitCollection: ...)`
-    static func b(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.b, compatibleWith: traitCollection)
-    }
-    
-    /// `UIImage(named: "c", bundle: ..., traitCollection: ...)`
-    static func c(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.c, compatibleWith: traitCollection)
-    }
-    
-    /// `UIImage(named: "d", bundle: ..., traitCollection: ...)`
-    static func d(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.d, compatibleWith: traitCollection)
-    }
-    
-    /// `UIImage(named: "e", bundle: ..., traitCollection: ...)`
-    static func e(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.e, compatibleWith: traitCollection)
-    }
-    
     /// This `R.image.chat` struct is generated, and contains static references to 2 images.
     struct chat {
       /// Image `chat_bubble_received`.

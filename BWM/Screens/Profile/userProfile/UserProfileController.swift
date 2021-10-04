@@ -10,6 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SwiftyUserDefaults
 import Flurry_iOS_SDK
+import Alamofire
 
 protocol UserProfileTabControllerDelegate: class {
     func didChangeContentHeight(_ height: CGFloat)
@@ -53,7 +54,9 @@ class UserProfileController: UIViewController {
     @IBOutlet private weak var viewSelector: SelectorComponent?
     @IBOutlet private weak var constraintEmbeddedHeight: NSLayoutConstraint!
     
-    
+    let getapiUrl = "http://93.188.167.68/projects/event_app/public/api/v1/accounts/nearByUsers"
+    let instaFollow = "https://www.instagram.com/"
+    var apiData = [AnyObject]()
     private var blurEffectView: UIVisualEffectView?
     private let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
     private var indicator: NVActivityIndicatorView?
@@ -77,18 +80,75 @@ class UserProfileController: UIViewController {
         super.viewDidLoad()
         self.setupLoadingView()
         
-        
+        let ab = UserDefaults.standard.value(forKey: "a") as? String
+        print(ab)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if isCurrentUserProfile {
-            Flurry.logEvent("UserProfileScreen_show")
-            self.updateUserData()
-        }
-        else {
-            Flurry.logEvent("AlienProfileScreen_show")
+        getUser()
+//        if isCurrentUserProfile {
+//            Flurry.logEvent("UserProfileScreen_show")
+//            self.updateUserData()
+//        }
+//        else {
+//            Flurry.logEvent("AlienProfileScreen_show")
+//        }
+    }
+    
+//MARK: - USER GET API
+    func getUser(){
+        if Reachability.isConnectedToNetwork(){
+
+            let username = UserDefaults.standard.value(forKey: "username") as? String ?? ""
+            Alamofire.request(instaFollow+username+"?__a=1",method: .get,encoding:  JSONEncoding.default).responseJSON{[self]
+                response in
+                switch(response.result){
+
+                case .success(let json):do{
+                    let success = response.response?.statusCode
+                    let respond = json as! NSDictionary
+//                    var abc = ""
+                    if success == 200{
+                        print("found",respond)
+                        let graph = respond.object(forKey: "graphql") as? NSDictionary
+                        let user = graph?.object(forKey: "user") as? NSDictionary
+                        let follow = user!.object(forKey: "edge_followed_by") as? NSDictionary
+                        let count = follow!.object(forKey: "count") as? Int
+                        print("countttt===",count)
+                        labelFollowers.text = "\(count!)"
+                        labelName.text = user!.object(forKey: "full_name") as? String ?? "Name"
+                        if let image = user!.object(forKey: "profile_pic_url") as? String{
+                         
+                              if image != ""{
+                                                            DispatchQueue.main.async {
+                                                                let url = URL(string: image)
+                                                                self.imageAvatar.af_setImage(withURL: url!)
+                                                            }
+                              }else{
+                                DispatchQueue.main.async {
+                                    let url = URL(string: "http://93.188.167.68/projects/event_app/public/default.jpgg")
+                                    self.imageAvatar.af_setImage(withURL: url!)
+                              }
+                                                
+                        
+                        }
+                        }
+                        UserDefaults.standard.setValue(count, forKey: "follow")
+                        
+                    }else{
+                        self.view.isUserInteractionEnabled = true
+                    }
+                }
+
+                case .failure(let error):do{
+                    print(error)
+                    self.view.isUserInteractionEnabled = true
+                }
+                }
+            }
+        }else{
+            Alerts.showNoConnectionErrorMessage()
         }
     }
     //MARK: - Test

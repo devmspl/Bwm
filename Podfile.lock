@@ -1,5 +1,7 @@
 PODS:
   - Alamofire (4.7.3)
+  - AlamofireImage (3.4.1):
+    - Alamofire (~> 4.7)
   - AlamofireObjectMapper (5.1.0):
     - Alamofire (~> 4.1)
     - ObjectMapper (~> 3.3)
@@ -72,6 +74,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - AlamofireImage
   - AlamofireObjectMapper
   - DatePickerDialog
   - DropDown
@@ -103,6 +106,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - AlamofireImage
     - AlamofireObjectMapper
     - Bolts
     - DatePickerDialog
@@ -136,6 +140,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  AlamofireImage: 78d67ccbb763d87ba44b21583d2153500a195630
   AlamofireObjectMapper: 3395e698901d8b0e6f48b7d0c43bd47875325102
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   DatePickerDialog: 5e1c24d9fe6506cd45dbc573eed7b0a251b1c09d
@@ -167,6 +172,6 @@ SPEC CHECKSUMS:
   UICircularProgressRing: 12c5b6e9bbe9c254052f31a150d22eaaa3555d01
   YPImagePicker: 2cc64e1b8b8bac827cf99865fcd1e304ab342315
 
-PODFILE CHECKSUM: 5e235f828d2e38f3883bf8fb619492bd53b13639
+PODFILE CHECKSUM: dc678269363e9d023ccfbb99d2637d933e19b61c
 
 COCOAPODS: 1.10.1

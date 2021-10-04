@@ -13,6 +13,7 @@ import Permission
 import YPImagePicker
 import Flurry_iOS_SDK
 import Alamofire
+import AlamofireImage
 
 class SignUpNameController: BaseViewController {
 
@@ -36,6 +37,7 @@ class SignUpNameController: BaseViewController {
     var password = ""
     let instaUrl = "https://www.instagram.com/web/search/topsearch/?context=user&count=0&query="
     let instaFollow = "https://www.instagram.com/"
+    var imgUrlpic = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -110,6 +112,7 @@ class SignUpNameController: BaseViewController {
                                     self.getFollower()
                                     print("userfound===")
                                     abc = username
+                                    UserDefaults.standard.setValue(abc, forKey: "username")
                                 }
                             }
                             
@@ -152,6 +155,28 @@ class SignUpNameController: BaseViewController {
                         let follow = user.object(forKey: "edge_followed_by") as! NSDictionary
                         let count = follow.object(forKey: "count") as! Int
                         print("countttt===",count)
+                        let imggg = user.object(forKey: "profile_pic_url") as? String
+                        imgUrlpic = imggg!
+                        UserDefaults.standard.setValue(imgUrlpic, forKey: "a")
+                        print("lsdbcjdvscjhdc",imgUrlpic)
+                        if let image = user.object(forKey: "profile_pic_url") as? String{
+                         
+                              if image != ""{
+                                                            DispatchQueue.main.async {
+                                                                let url = URL(string: image)
+                                                               
+                                                                self.imageAvatar.af_setImage(withURL: url!)
+                                                            }
+                              }else{
+                                DispatchQueue.main.async {
+                                    let url = URL(string: "http://93.188.167.68/projects/event_app/public/default.jpgg")
+                                    self.imageAvatar.af_setImage(withURL: url!)
+                              }
+                                                
+                        
+                        }
+                        }
+                        UserDefaults.standard.setValue(count, forKey: "follow")
                         SignupAPi()
                     }else{
                         self.view.isUserInteractionEnabled = true
@@ -168,26 +193,31 @@ class SignUpNameController: BaseViewController {
             Alerts.showNoConnectionErrorMessage()
         }
     }
+    
 //MARK:- SIGNUPAPI
     func SignupAPi(){
         
         if Reachability.isConnectedToNetwork(){
             self.blockSelf()
+            print("lsdbcjdasdsadasdasdasdavscjhdc",imgUrlpic)
+            let count = UserDefaults.standard.value(forKey: "follow") as! Int
             let para: [String:Any] = ["username":fieldUserName.text!,
                                       "email": email,
                                       "password":password,
                                       "isCustomer":isCustomer,
-                                      "avatarMediaId":"123",
+                                      "avatarMediaId":imgUrlpic,
                                       "firstName":fieldFirst.text!,
                                       "lastName":fieldLast.text!,
                                       "birthDate":"12/10/2021",
                                       "gender":"0",
                                       "ethnicityId":"2312341",
                                       "categoryId" :"gewrger",
-                                      "longitude":"12312.334234.35",
-                                      "latitude":"65.7676756.567567.657",
+                                      "longitude":"77.6808",
+                                      "latitude":"30.7369",
                                       "address":"abc Street",
-                                      "about":"BMW owner"]
+                                      "about":"BMW owner",
+                                      "followers":count,
+                                      "profile_picture": imgUrlpic]
             print("para",para)
             Alamofire.request(Constants.Api.urlWithMethod(.accounts), method: .post, parameters: para).responseJSON{ [self]
                 response in
@@ -196,6 +226,8 @@ class SignUpNameController: BaseViewController {
                 
                 case .success(let json):do{
                     print("json")
+                    print("imagepic",imageAvatar)
+                    print(imgUrlpic)
                     let success = response.response?.statusCode
                     let respond = json as! NSDictionary
                     self.blockSelf()
@@ -204,6 +236,7 @@ class SignUpNameController: BaseViewController {
                         msg = respond.object(forKey: "message") as! String
                         self.continueReg(mesg: msg)
                         self.unblockSelf()
+                        print("counttttttttt",count)
                     }else{
                         self.blockSelf()
                         Alerts.showCustomErrorMessage(title: "BMW", message: "Bad request", button: "OK")
