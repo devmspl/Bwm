@@ -23,7 +23,9 @@ class UserGridController: UICollectionViewController {
     private var topUserIndexes: [Int] = []
     
     private var currentOffset: CGFloat = 0.0
-    
+    let image = [UIImage(named: "a"),UIImage(named: "b"),UIImage(named: "c"),UIImage(named: "d"),UIImage(named: "e")]
+    let follow = ["200 followers","600 followers","400 followers","1500 followers","1K followers"]
+    let verify = [UIImage(named: "Search/badge_off"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_off")]
     override func viewDidLoad() {
         super.viewDidLoad()
         contentFlowLayout.delegate = self
@@ -112,12 +114,14 @@ class UserGridController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return self.sortedUsers.count
-        return 10
+        return image.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.userGridCell.identifier, for: indexPath) as! UserGridCell
-        
+        cell.imageAvatar.image = image[indexPath.row]
+        cell.labelFollowersCount.text = follow[indexPath.row]
+        cell.imageVerified.image = verify[indexPath.row]
 //        cell.layer.shouldRasterize = true;
 //        cell.layer.rasterizationScale = UIScreen.main.scale
 //

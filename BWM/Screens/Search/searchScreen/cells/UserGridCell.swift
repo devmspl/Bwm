@@ -10,24 +10,25 @@ import UIKit
 import Kingfisher
 
 class UserGridCell: UICollectionViewCell {
-    @IBOutlet private weak var imageAvatar: UIImageView!
-    @IBOutlet private weak var labelFollowersCount: UILabel!
-    @IBOutlet private weak var imageVerified: UIImageView!
     
-    @IBOutlet private weak var viewFollowers: UIView!
+    @IBOutlet public weak var imageAvatar: UIImageView!
+    @IBOutlet public weak var labelFollowersCount: UILabel!
+    @IBOutlet public weak var imageVerified: UIImageView!
     
-    func setData(image: String, followers: Int?, verified: Bool) {
-        let url = URL(string: image)
-        imageAvatar.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.35))], progressBlock: nil) { _, _, _, _ in
-            self.viewFollowers.isHidden = false
-        }
-        let followersCount = followers ?? 0
-        labelFollowersCount.text = "Followers: \(followersCount.roundedString)"
-        
-        if verified {
-            imageVerified.image = R.image.search.badge_on()
-        } else {
-            imageVerified.image = R.image.search.badge_off()
-        }
-    }
+    @IBOutlet public weak var viewFollowers: UIView!
+    
+//    func setData(image: String, followers: Int?, verified: Bool) {
+//        let url = URL(string: image)
+//        imageAvatar.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.35))], progressBlock: nil) { _, _, _, _ in
+//            self.viewFollowers.isHidden = false
+//        }
+//        let followersCount = followers ?? 0
+//        labelFollowersCount.text = "Followers: \(followersCount.roundedString)"
+//        
+//        if verified {
+//            imageVerified.image = R.image.search.badge_on()
+//        } else {
+//            imageVerified.image = R.image.search.badge_off()
+//        }
+//    }
 }
