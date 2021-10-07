@@ -68,17 +68,16 @@ class SignUpNameController: BaseViewController {
         self.userInfo.userData["firstName"] = fieldFirst.text
         self.userInfo.userData["lastName"] = fieldLast.text
         self.userInfo.userData["username"] = fieldUserName.text
-        self.userInfo.userData["isCustomer"] = 1
-//SignupAPi()
-        
-        
+        UserDefaults.standard.setValue(fieldFirst.text, forKey: "firstName")
+        UserDefaults.standard.setValue(fieldLast.text, forKey: "lastName")
+        UserDefaults.standard.setValue(fieldUserName.text, forKey: "username")
+//        self.userInfo.userData["isCustomer"] = 1
         if isCustomer == "0"{
             checkInsta()
         }else{
-            
-            
-            let vc = storyboard?.instantiateViewController(withIdentifier: "SignUpProfileController") as! SignUpProfileController
-            self.navigationController?.pushViewController(vc, animated: true)
+            checkInsta()
+//            let vc = storyboard?.instantiateViewController(withIdentifier: "SignUpProfileController") as! SignUpProfileController
+//            self.navigationController?.pushViewController(vc, animated: true)
         }
 //        if validateFields() {
 //            blockSelf()
@@ -110,10 +109,11 @@ class SignUpNameController: BaseViewController {
                                 let username = userr.object(forKey: "username") as! String
                                 print("helloooo",username)
                                 if self.fieldUserName.text == username{
+                                    
                                     self.getFollower()
                                     print("userfound===")
                                     abc = username
-//                                    UserDefaults.standard.setValue(abc, forKey: "username")
+                                    UserDefaults.standard.setValue(abc, forKey: "username")
                                 }
                             }
                             
@@ -158,7 +158,7 @@ class SignUpNameController: BaseViewController {
                         print("countttt===",count)
                         let imggg = user.object(forKey: "profile_pic_url") as? String
                         imgUrlpic = imggg!
-                        UserDefaults.standard.setValue(imgUrlpic, forKey: "a")
+                        UserDefaults.standard.setValue(imgUrlpic, forKey: "img")
                         print("lsdbcjdvscjhdc",imgUrlpic)
                         if let image = user.object(forKey: "profile_pic_url") as? String{
                          
@@ -178,7 +178,13 @@ class SignUpNameController: BaseViewController {
                         }
                         }
                         UserDefaults.standard.setValue(count, forKey: "follow")
-                        SignupAPi()
+                        if isCustomer == "0"{
+                            SignupAPi()
+                        }
+                        else{
+                            let vc = storyboard?.instantiateViewController(withIdentifier: "SignUpProfileController") as! SignUpProfileController
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        }
                     }else{
                         self.view.isUserInteractionEnabled = true
                     }
@@ -201,6 +207,7 @@ class SignUpNameController: BaseViewController {
         if Reachability.isConnectedToNetwork(){
             self.blockSelf()
             print("lsdbcjdasdsadasdasdasdavscjhdc",imgUrlpic)
+            
             let count = UserDefaults.standard.value(forKey: "follow") as! Int
             let para: [String:Any] = ["username":fieldUserName.text!,
                                       "email": email,

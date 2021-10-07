@@ -92,6 +92,7 @@ class SignUpEmailController: BaseViewController {
     }
     
     @IBAction func nextTapped(_ sender: Any) {
+        
     }
     //MARK: - Navigation
     
@@ -107,6 +108,8 @@ class SignUpEmailController: BaseViewController {
         if !self.isFbSignUp {
             self.userInfo.userData["email"] = fieldEmail.text
             self.userInfo.userData["password"] = fieldPassword.text
+            UserDefaults.standard.setValue(fieldEmail.text, forKey: "email")
+            UserDefaults.standard.setValue(fieldPassword.text, forKey: "password")
         }
         
         if let screen = segue.destination as? SignUpNameController {

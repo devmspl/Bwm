@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyUserDefaults
 import Flurry_iOS_SDK
+import Alamofire
 
 class SignUpLocationController: BaseViewController {
 
@@ -27,13 +28,13 @@ class SignUpLocationController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        labelScreenTitle.text = userInfo.isEditing ? "Edit account" : "New Account"
-        Flurry.logEvent("SignUpScreen_location")
-        if !self.userInfo.isEditing {
-            self.constraintViewCodeHeight.constant = 0.0
-        }
-        setupFields()
-        setupStepLabel()
+//        labelScreenTitle.text = userInfo.isEditing ? "Edit account" : "New Account"
+//        Flurry.logEvent("SignUpScreen_location")
+//        if !self.userInfo.isEditing {
+//            self.constraintViewCodeHeight.constant = 0.0
+//        }
+//        setupFields()
+//        setupStepLabel()
     }
     
     //MARK: - Actions
@@ -45,36 +46,124 @@ class SignUpLocationController: BaseViewController {
     }
     
     @IBAction private func onButtonSave() {
-        if validateFields() {
-            self.blockSelf()
-            self.sendPhoto {
-                if self.userInfo.isEditing {
-                    Flurry.logEvent("SignUpScreen_updateProfile")
-                    UpdateProfileRequest.fire(data: self.userInfo.userData, completion: { [weak self] (completed) in
-                        self?.unblockSelf()
-                        self?.proceedWithRegistration(success: completed)
-                    })
-                }
-                else {
-                    Flurry.logEvent("SignUpScreen_finishFreelancerSignUp")
-                    if self.userInfo.isFBSignUp {
-//                        FBSignUpRequest.fire(data: self.userInfo.userData, completion: { [weak self] (completed) in
+        signUpApi()
+//        if validateFields() {
+           
+//            self.sendPhoto {
+//                if self.userInfo.isEditing {
+//                    Flurry.logEvent("SignUpScreen_updateProfile")
+//                    UpdateProfileRequest.fire(data: self.userInfo.userData, completion: { [weak self] (completed) in
+//                        self?.unblockSelf()
+//                        self?.proceedWithRegistration(success: completed)
+//                    })
+//                }
+//                else {
+//                    Flurry.logEvent("SignUpScreen_finishFreelancerSignUp")
+//                    if self.userInfo.isFBSignUp {
+////                        FBSignUpRequest.fire(data: self.userInfo.userData, completion: { [weak self] (completed) in
+////                            self?.unblockSelf()
+////                            self?.proceedWithRegistration(success: completed)
+////                        })
+//                        self.unblockSelf()
+//                    }
+//                    else {
+//                        SignUpRequest.fire(data: self.userInfo.userData) { [weak self] (completed) in
 //                            self?.unblockSelf()
 //                            self?.proceedWithRegistration(success: completed)
-//                        })
-                        self.unblockSelf()
-                    }
-                    else {
-                        SignUpRequest.fire(data: self.userInfo.userData) { [weak self] (completed) in
-                            self?.unblockSelf()
-                            self?.proceedWithRegistration(success: completed)
-                        }
-                    }
-                }
-            }
-        }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
     
+    
+//MARK:- SIGN UP API
+    
+  func signUpApi(){
+        
+        if Reachability.isConnectedToNetwork(){
+            self.blockSelf()
+            let imgUrlpic = UserDefaults.standard.value(forKey: "img") as? String ?? ""
+            print(imgUrlpic)
+            let username = UserDefaults.standard.value(forKey: "username") as? String ?? ""
+            print(username)
+            let email = UserDefaults.standard.value(forKey: "email") as? String ?? ""
+            print(email)
+            let password = UserDefaults.standard.value(forKey: "password") as? String ?? ""
+            print(password)
+            let firstName = UserDefaults.standard.value(forKey: "firstName") as? String ?? ""
+            print(firstName)
+            let lastName = UserDefaults.standard.value(forKey: "lastName") as? String ?? ""
+            print(lastName)
+            let dob = UserDefaults.standard.value(forKey: "date") as? String ?? ""
+            print(dob)
+            let ethnicity = UserDefaults.standard.value(forKey: "ethnicity") as? String ?? ""
+            print(ethnicity)
+            let category = UserDefaults.standard.value(forKey: "category") as? String ?? ""
+            print(category)
+            let count = UserDefaults.standard.value(forKey: "follow") as! Int
+            print(count)
+            let gender = UserDefaults.standard.value(forKey: "gender") as! Int
+            print(gender)
+            let para: [String:Any] = ["username":username,
+                                      "email": email,
+                                      "password":password,
+                                      "isCustomer":1,
+                                      "avatarMediaId":imgUrlpic,
+                                      "firstName":firstName,
+                                      "lastName":lastName,
+                                      "birthDate":dob,
+                                      "gender":gender,
+                                      "ethnicityId":ethnicity,
+                                      "categoryId" :category,
+                                      "longitude":"77.6808",
+                                      "latitude":"30.7369",
+                                      "address":fieldAddress.text!,
+                                      "about":"BMW owner",
+                                      "followers":count,
+                                      "profile_picture": imgUrlpic]
+            print("para",para)
+            Alamofire.request(Constants.Api.urlWithMethod(.accounts), method: .post, parameters: para).responseJSON{ [self]
+                response in
+                
+                switch(response.result){
+                
+                case .success(let json):do{
+                    print("json")
+                    print("imagepic",imgUrlpic)
+                    print(imgUrlpic)
+                    let success = response.response?.statusCode
+                    let respond = json as! NSDictionary
+                    self.unblockSelf()
+                    if success == 200{
+                        print("sucess====",respond)
+                       let msg = respond.object(forKey: "message") as! String
+//                        self.continueReg(mesg: msg)
+                        self.unblockSelf()
+                        print("counttttttttt",count)
+                    }else{
+                        self.unblockSelf()
+                        Alerts.showCustomErrorMessage(title: "BMW", message: "Bad request", button: "OK")
+                        self.view.isUserInteractionEnabled = true
+                    }
+                }
+                
+                case .failure(let error):do{
+                    self.unblockSelf()
+                    print("error-===",error)
+                    Alerts.showCustomErrorMessage(title: "BMW", message: "Bad request", button: "OK")
+                    self.view.isUserInteractionEnabled = true
+                }
+                
+                }
+            }
+        }else{
+            self.unblockSelf()
+            Alerts.showNoConnectionErrorMessage()
+        }
+        
+    }
     //MARK: - Private methods
     
     private func setupFields() {
@@ -108,27 +197,27 @@ class SignUpLocationController: BaseViewController {
         labelStep.attributedText = finalStr
     }
     
-    private func sendPhoto(withCompletion completion: @escaping ()->Void) {
-        if let photo = self.userInfo.image {
-            let parameter: [String: Any] = [
-                "file": ImageStructInfo(fileName: "image.jpg", type: "image/jpg", data: photo.toData())
-            ]
-            Flurry.logEvent("SignUpScreen_sendPhoto")
-            UploadImage(url: Constants.Api.urlWithMethod(.media), parameter: parameter as [String : AnyObject]).responseJSON { [weak self, completion] (data, error) in
-                if error != nil {
-                    print("error")
-                } else {
-                    let id: Int = data!["id"] as! Int
-                    self?.userInfo.userData["avatarMediaId"] = id
-                    
-                    completion()
-                }
-            }
-        }
-        else {
-            completion()
-        }
-    }
+//    private func sendPhoto(withCompletion completion: @escaping ()->Void) {
+//        if let photo = self.userInfo.image {
+//            let parameter: [String: Any] = [
+//                "file": ImageStructInfo(fileName: "image.jpg", type: "image/jpg", data: photo.toData())
+//            ]
+//            Flurry.logEvent("SignUpScreen_sendPhoto")
+//            UploadImage(url: Constants.Api.urlWithMethod(.media), parameter: parameter as [String : AnyObject]).responseJSON { [weak self, completion] (data, error) in
+//                if error != nil {
+//                    print("error")
+//                } else {
+//                    let id: Int = data!["id"] as! Int
+//                    self?.userInfo.userData["avatarMediaId"] = id
+//
+//                    completion()
+//                }
+//            }
+//        }
+//        else {
+//            completion()
+//        }
+//    }
     
     private func proceedWithRegistration(success: Bool) {
         if success {
@@ -170,9 +259,9 @@ extension SignUpLocationController: SelectLocationControllerDelegate {
     }
     
     func didSelectLocation(_ location: LocationModel) {
-        self.userInfo.userData["address"] = location.locationName
-        self.userInfo.userData["latitude"] = location.latitude
-        self.userInfo.userData["longitude"] = location.longitude
+//        self.userInfo.userData["address"] = location.locationName
+       // self.userInfo.userData["latitude"] = location.latitude
+        //self.userInfo.userData["longitude"] = location.longitude
         self.fieldAddress.text = location.locationName
         self.fieldAddress.isFilled = true
     }

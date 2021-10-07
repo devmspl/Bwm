@@ -10,6 +10,7 @@ import UIKit
 import McPicker
 import DatePickerDialog
 import Flurry_iOS_SDK
+import DropDown
 
 class SignUpProfileController: BaseViewController {
 
@@ -23,8 +24,12 @@ class SignUpProfileController: BaseViewController {
     @IBOutlet private weak var labelStep: UILabel!
     @IBOutlet private weak var labelScreenTitle: UILabel!
     
+    let drop = DropDown()
     
     var userInfo: UserSetupModel!
+    
+    var ethnicity = ["Indigenous peoples","Americans","White people","American Indian group","Black people","Jewish people","Asian Americans","Han Chinese","Dravidian peoples","Puerto Ricans","Hispanic","Mexicans","Asian","European","African","Austrians","British"]
+    var category = ["Barber","Fitness Trainer","Artist"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,45 +43,37 @@ class SignUpProfileController: BaseViewController {
     //MARK: - Actions
     
     @IBAction private func onButtonEthnicity() {
-        let names = EthnicityStorage.shared.ethnicities.map { (item) -> String in
-            return item.name
-        }
-        McPicker.show(data: [names]) {  [weak self] (selections: [Int : String]) -> Void in
-            Flurry.logEvent("SignUpScreen_profile_selectEthnicity")
-            if let name = selections[0] {
-                self?.fieldEthnicity.text = name
-                self?.fieldEthnicity.isFilled = true
-                self?.userInfo.userData["ethnicityId"] = EthnicityStorage.idForName(name)
-            }
-        }
+        drop.anchorView = fieldEthnicity
+        drop.dataSource = ethnicity
+        drop.show()
+        drop.selectionAction = {[unowned self] (index: Int,item: String) in
+            fieldEthnicity.text = item
+            UserDefaults.standard.setValue(item, forKey: "ethnicity")
+         }
     }
     
     @IBAction private func onButtonBirthdate() {
-        DatePickerDialog().show("DOB", doneButtonTitle: "Done", cancelButtonTitle: "Cancel", datePickerMode: .date) { (date) -> Void in
+        DatePickerDialog().show("DOB", doneButtonTitle: "Done", cancelButtonTitle: "Cancel", datePickerMode: .date) { [self] (date) -> Void in
             if let dt = date {
                 Flurry.logEvent("SignUpScreen_profile_selectDate")
                 let formatter = DateFormatter()
                 formatter.dateFormat = "MM-dd-yyyy"
                 self.fieldBirthdate.text = formatter.string(from: dt)
                 self.fieldBirthdate.isFilled = true
-                self.userInfo.userData["birthDate"] = formatter.string(from: dt)
+                UserDefaults.standard.setValue(fieldBirthdate.text!, forKey: "date")
+//                self.userInfo.userData["birthDate"] = formatter.string(from: dt)
             }
         }
     }
     
     @IBAction private func onButtonCategory() {
-        let names = CategoryStorage.shared.categories.map { (item) -> String in
-            return item.name
-        }
-        McPicker.show(data: [names]) {  [weak self] (selections: [Int : String]) -> Void in
-            if let name = selections[0] {
-                Flurry.logEvent("SignUpScreen_profile_selectCategory")
-                self?.fieldCategory.text = name
-                self?.fieldCategory.isFilled = true
-                self?.userInfo.userData["categoryId"] = CategoryStorage.idForName(name)
-            }
-            
-        }
+        drop.anchorView = fieldCategory
+        drop.dataSource = category
+        drop.show()
+        drop.selectionAction = {[unowned self] (index: Int,item: String) in
+            fieldCategory.text = item
+           
+         }
     }
     
     @IBAction private func onButtonGender(_ sender: UIButton) {
@@ -149,31 +146,19 @@ class SignUpProfileController: BaseViewController {
         
         buttonFemale.setTitleColor(gender == 1 ? .white : .black, for: .normal)
         buttonFemale.setBackgroundImage(gender == 1 ? R.image.common.gradient() : nil, for: .normal)
+        
+            UserDefaults.standard.setValue(gender, forKey: "gender")
+        print(UserDefaults.standard.value(forKey: "gender"))
+        
     }
     
-    private func validateFields() -> Bool {
-        var valid: Bool = true
-        var errorMessage: String = ""
-        if !fieldEthnicity.isFilled {
-            valid = false
-            errorMessage += "Ethnicity field can't be empty\n"
+    private func validateFields()-> Bool {
+        if fieldCategory.text == "" || fieldCategory.text == "" || fieldBirthdate.text == ""{
+            Alerts.showCustomErrorMessage(title: "BWM", message: "Please fill all fields", button: "OK")
+        }else{
+            return true
         }
-        
-        if !fieldBirthdate.isFilled {
-            valid = false
-            errorMessage += "Date of birth field can't be empty\n"
-        }
-        
-        if !fieldCategory.isFilled {
-            valid = false
-            errorMessage += "Category field can't be empty"
-        }
-        
-        if !valid {
-            Alerts.showCustomErrorMessage(title: "Error", message: errorMessage, button: "OK")
-        }
-        
-        return valid
+        return true
     }
     
     //MARK: - Navigation
@@ -186,6 +171,10 @@ class SignUpProfileController: BaseViewController {
         
         if let screen = segue.destination as? SignUpLocationController {
             screen.userInfo = self.userInfo
+            UserDefaults.standard.setValue(fieldEthnicity.text!, forKey: "ethnicity")
+            UserDefaults.standard.setValue(fieldBirthdate.text!, forKey: "date")
+            UserDefaults.standard.setValue(fieldCategory.text!, forKey: "category")
+            
         }
     }
 
