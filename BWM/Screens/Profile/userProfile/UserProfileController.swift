@@ -114,9 +114,13 @@ class UserProfileController: UIViewController {
                         let graph = respond.object(forKey: "graphql") as? NSDictionary
                         let user = graph?.object(forKey: "user") as? NSDictionary
                         let follow = user!.object(forKey: "edge_followed_by") as? NSDictionary
-                        let count = follow!.object(forKey: "count") as? Int
+                        let count = follow!.object(forKey: "count") as? Int ?? 0
+                        let posDict = user!.object(forKey: "edge_owner_to_timeline_media") as! NSDictionary
+                        let post = posDict.object(forKey: "count") as? Int ?? 0
+                        
                         print("countttt===",count)
-                        labelFollowers.text = "\(count!)"
+                        labelPosts.text = "\(post)"
+                        labelFollowers.text = "\(count)"
                         labelName.text = user!.object(forKey: "full_name") as? String ?? "Name"
                         if let image = user!.object(forKey: "profile_pic_url") as? String{
                          

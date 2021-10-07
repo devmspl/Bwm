@@ -33,6 +33,8 @@ class SignInRequest: BaseViewController {
                         let long = respond.object(forKey: "longitude") as? String ?? "77.6808"
                         UserDefaults.standard.setValue(lat, forKey: "lat")
                         UserDefaults.standard.setValue(long, forKey: "long")
+                        let abc = respond.object(forKey: "username") as! String
+                        UserDefaults.standard.setValue(abc, forKey: "username")
                         print("tokennnnn..\(Defaults[.token] ?? "")")
 //                        Defaults[.liveTracking] = response.result.value!.settings?.tracking == 1
 //                        Defaults[.userIsPro] = response.result.value!.isPro ?? false

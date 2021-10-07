@@ -74,8 +74,9 @@ class SignUpNameController: BaseViewController {
         
         if isCustomer == "0"{
             checkInsta()
-//            SignupAPi()
         }else{
+            
+            
             let vc = storyboard?.instantiateViewController(withIdentifier: "SignUpProfileController") as! SignUpProfileController
             self.navigationController?.pushViewController(vc, animated: true)
         }
@@ -112,7 +113,7 @@ class SignUpNameController: BaseViewController {
                                     self.getFollower()
                                     print("userfound===")
                                     abc = username
-                                    UserDefaults.standard.setValue(abc, forKey: "username")
+//                                    UserDefaults.standard.setValue(abc, forKey: "username")
                                 }
                             }
                             

@@ -86,7 +86,7 @@ open class McPicker: UIView {
             for component in pickerSelectRowsForComponents!.keys {
                 if let row = pickerSelectRowsForComponents![component]?.keys.first,
                     let isAnimated = pickerSelectRowsForComponents![component]?.values.first {
-                    pickerSelection[component] = pickerData[component][row]
+//                    pickerSelection[component] = pickerData[component][row]
                     picker.selectRow(row, inComponent: component, animated: isAnimated)
                 }
             }
@@ -107,7 +107,8 @@ open class McPicker: UIView {
         return self.backgroundColorAlpha ?? Constant.backgroundColorAlpha
     }
     internal var pickerSelection: [Int:String] = [:]
-    internal var pickerData: [[String]] = []
+//    internal var pickerData: [[String]] = []
+    var pickerData = ["Indigenous peoples","Americans","White people","American Indian group","Black people","Jewish people","Asian Americans","Han Chinese","Dravidian peoples","Puerto Ricans","Hispanic","Mexicans","Asian","European","African","Austrians","British"]
     internal var numberOfComponents: Int {
         return pickerData.count
     }
@@ -141,8 +142,8 @@ open class McPicker: UIView {
 
     convenience public init(data: [[String]]) {
         self.init(frame: CGRect.zero)
-        self.pickerData = data
-        setup()
+//        self.pickerData = data
+//        setup()
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -350,28 +351,28 @@ open class McPicker: UIView {
         self.dismissViews()
     }
 
-    private func setup() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(McPicker.cancel))
-        tapGestureRecognizer.delegate = self
-        self.addGestureRecognizer(tapGestureRecognizer)
-
-        let fixedSpace = McPickerBarButtonItem.fixedSpace(width: appWindow.bounds.size.width * Constant.barButtonFixedSpacePadding)
-        setToolbarItems(items: [fixedSpace, McPickerBarButtonItem.cancel(mcPicker: self),
-                                McPickerBarButtonItem.flexibleSpace(), McPickerBarButtonItem.done(mcPicker: self), fixedSpace])
-
-        backgroundView.backgroundColor = UIColor.white
-
-        picker.delegate = self
-        picker.dataSource = self
-
-        sizeViews()
-
-        // Default selection to first item per component
-        //
-        for (index, element) in pickerData.enumerated() {
-            pickerSelection[index] = element.first
-        }
-    }
+//    private func setup() {
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(McPicker.cancel))
+//        tapGestureRecognizer.delegate = self
+//        self.addGestureRecognizer(tapGestureRecognizer)
+//
+//        let fixedSpace = McPickerBarButtonItem.fixedSpace(width: appWindow.bounds.size.width * Constant.barButtonFixedSpacePadding)
+//        setToolbarItems(items: [fixedSpace, McPickerBarButtonItem.cancel(mcPicker: self),
+//                                McPickerBarButtonItem.flexibleSpace(), McPickerBarButtonItem.done(mcPicker: self), fixedSpace])
+//
+//        backgroundView.backgroundColor = UIColor.white
+//
+//        picker.delegate = self
+//        picker.dataSource = self
+//
+//        sizeViews()
+//
+//        // Default selection to first item per component
+//        //
+//        for (index, element) in pickerData.enumerated() {
+//            pickerSelection[index] = element.first
+//        }
+//    }
 
     private func setToolbarProperties() {
         if let _toolbarButtonsColor = toolbarButtonsColor {
@@ -414,35 +415,35 @@ extension McPicker : UIPickerViewDataSource {
     }
 }
 
-extension McPicker : UIPickerViewDelegate {
-    public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        var pickerLabel = view as? UILabel
-
-        if pickerLabel == nil {
-            pickerLabel = UILabel()
-
-            if let goodLabel = label {
-                pickerLabel?.textAlignment = goodLabel.textAlignment
-                pickerLabel?.font = goodLabel.font
-                pickerLabel?.textColor = goodLabel.textColor
-                pickerLabel?.backgroundColor = goodLabel.backgroundColor
-                pickerLabel?.numberOfLines = goodLabel.numberOfLines
-            } else {
-                pickerLabel?.textAlignment = .center
-                pickerLabel?.font = UIFont.systemFont(ofSize: self.fontSize)
-            }
-        }
-
-        pickerLabel?.text = pickerData[component][row]
-
-        return pickerLabel!
-    }
-
-    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.pickerSelection[component] = pickerData[component][row]
-        self.selectionChangedHandler?(self.pickerSelection, component)
-    }
-}
+//extension McPicker : UIPickerViewDelegate {
+//    public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+//        var pickerLabel = view as? UILabel
+//
+//        if pickerLabel == nil {
+//            pickerLabel = UILabel()
+//
+//            if let goodLabel = label {
+//                pickerLabel?.textAlignment = goodLabel.textAlignment
+//                pickerLabel?.font = goodLabel.font
+//                pickerLabel?.textColor = goodLabel.textColor
+//                pickerLabel?.backgroundColor = goodLabel.backgroundColor
+//                pickerLabel?.numberOfLines = goodLabel.numberOfLines
+//            } else {
+//                pickerLabel?.textAlignment = .center
+//                pickerLabel?.font = UIFont.systemFont(ofSize: self.fontSize)
+//            }
+//        }
+//
+//        pickerLabel?.text = pickerData[component][row]
+//
+//        return pickerLabel!
+//    }
+//
+//    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+//        self.pickerSelection[component] = pickerData[component][row]
+//        self.selectionChangedHandler?(self.pickerSelection, component)
+//    }
+//}
 
 extension McPicker : UIPopoverPresentationControllerDelegate {
     public func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
