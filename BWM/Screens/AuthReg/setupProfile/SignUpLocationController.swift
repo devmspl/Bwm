@@ -109,12 +109,12 @@ class SignUpLocationController: BaseViewController {
             let para: [String:Any] = ["username":username,
                                       "email": email,
                                       "password":password,
-                                      "isCustomer":1,
-                                      "avatarMediaId":imgUrlpic,
+                                      "isCustomer":"1",
+                                      "avatarMediaId":"",
                                       "firstName":firstName,
                                       "lastName":lastName,
-                                      "birthDate":dob,
-                                      "gender":gender,
+                                      "birthDate":"12/10/2021",
+                                      "gender":"\(gender)",
                                       "ethnicityId":ethnicity,
                                       "categoryId" :category,
                                       "longitude":"77.6808",
@@ -124,7 +124,7 @@ class SignUpLocationController: BaseViewController {
                                       "followers":count,
                                       "profile_picture": imgUrlpic]
             print("para",para)
-            Alamofire.request(Constants.Api.urlWithMethod(.accounts), method: .post, parameters: para).responseJSON{ [self]
+            Alamofire.request(Constants.Api.urlWithMethod(.accounts), method: .post, parameters: para, encoding: JSONEncoding.default).responseJSON{ [self]
                 response in
                 
                 switch(response.result){
@@ -139,12 +139,13 @@ class SignUpLocationController: BaseViewController {
                     if success == 200{
                         print("sucess====",respond)
                        let msg = respond.object(forKey: "message") as! String
-//                        self.continueReg(mesg: msg)
+                        self.continueReg(mesg: msg)
                         self.unblockSelf()
                         print("counttttttttt",count)
                     }else{
                         self.unblockSelf()
-                        Alerts.showCustomErrorMessage(title: "BMW", message: "Bad request", button: "OK")
+                        let message = respond.object(forKey: "message") as! String
+                        Alerts.showCustomErrorMessage(title: "BMW", message: message, button: "OK")
                         self.view.isUserInteractionEnabled = true
                     }
                 }
@@ -152,7 +153,8 @@ class SignUpLocationController: BaseViewController {
                 case .failure(let error):do{
                     self.unblockSelf()
                     print("error-===",error)
-                    Alerts.showCustomErrorMessage(title: "BMW", message: "Bad request", button: "OK")
+                    
+                    Alerts.showCustomErrorMessage(title: "BMW", message: "Bad Request Failure", button: "OK")
                     self.view.isUserInteractionEnabled = true
                 }
                 
@@ -165,6 +167,19 @@ class SignUpLocationController: BaseViewController {
         
     }
     //MARK: - Private methods
+    
+    
+    private func continueReg(mesg: String){
+            let alert = UIAlertController.init(title: "BWM", message: mesg, preferredStyle: .alert)
+            let ok = UIAlertAction.init(title: "OK", style: .default) { (ok) in
+                
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "SigninController") as! SigninController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            alert.addAction(ok)
+            self.present(alert, animated: true, completion: nil)
+    }
+    
     
     private func setupFields() {
         if let address = self.userInfo.userData["address"] as? String {
