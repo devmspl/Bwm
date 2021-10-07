@@ -74,10 +74,7 @@ class SigninController: BaseViewController {
         super.viewDidDisappear(animated)
         //    unblockView()
     }
-    
-
-    
-    
+        
     @IBAction func tapLogin(_ sender: Any) {
         blockSelf()
         if fieldsAreValid() {
@@ -94,12 +91,11 @@ class SigninController: BaseViewController {
                     let vc = storyboard.instantiateViewController(withIdentifier: "Main") as! MainTabbarController
                     vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
-                        }
-
-                    
-//                } else {
-//                    self.unblockSelf()
-//                }
+                        
+                }
+                 else {
+                    self.unblockSelf()
+                }
             }
         }
         else {

@@ -27,25 +27,35 @@ class SignInRequest: BaseViewController {
                     let success = response.response?.statusCode
                     let respond = json as! NSDictionary
                     if success == 200{
-                        print("success==",respond)
-                        Defaults[.token] = respond.object(forKey: "remember_token") as? String ?? ""
-                        let lat = respond.object(forKey: "latitude") as? String ?? "30.7369"
-                        let long = respond.object(forKey: "longitude") as? String ?? "77.6808"
-                        UserDefaults.standard.setValue(lat, forKey: "lat")
-                        UserDefaults.standard.setValue(long, forKey: "long")
-                        let abc = respond.object(forKey: "username") as! String
-                        UserDefaults.standard.setValue(abc, forKey: "username")
-                        print("tokennnnn..\(Defaults[.token] ?? "")")
-//                        Defaults[.liveTracking] = response.result.value!.settings?.tracking == 1
-//                        Defaults[.userIsPro] = response.result.value!.isPro ?? false
-//                        if response.result.value?.isCustomer == true {
-//                            Defaults[.userType] = "customer"
-//                        } else {
-//                            Defaults[.userType] = "freelancer"
-//                        }
-//                        Defaults[.verificationCode] = response.result.value!.verificationCode
-                        
-                        completion(true)
+                        let succ = respond.object(forKey: "status") as! String
+                        if succ == "1"{
+                            print("success==",respond)
+                            Defaults[.token] = respond.object(forKey: "remember_token") as? String ?? ""
+                            let lat = respond.object(forKey: "latitude") as? String ?? "30.7369"
+                            let long = respond.object(forKey: "longitude") as? String ?? "77.6808"
+                            UserDefaults.standard.setValue(lat, forKey: "lat")
+                            UserDefaults.standard.setValue(long, forKey: "long")
+                            let abc = respond.object(forKey: "username") as! String
+                            UserDefaults.standard.setValue(abc, forKey: "username")
+                            print("tokennnnn..\(Defaults[.token] ?? "")")
+    //                        Defaults[.liveTracking] = response.result.value!.settings?.tracking == 1
+    //                        Defaults[.userIsPro] = response.result.value!.isPro ?? false
+    //                        if response.result.value?.isCustomer == true {
+    //                            Defaults[.userType] = "customer"
+    //                        } else {
+    //                            Defaults[.userType] = "freelancer"
+    //                        }
+    //                        Defaults[.verificationCode] = response.result.value!.verificationCode
+                            
+                            completion(true)
+                        }
+                        else{
+                            //unblockSelf()
+                            completion(false)
+                            let msg = respond.object(forKey: "message") as! String
+                            Alerts.showCustomErrorMessage(title: "BWM", message: msg , button: "OK")
+                        }
+                     
                     }else{
                         completion(false)
                         let message = respond.object(forKey: "message") as? String
