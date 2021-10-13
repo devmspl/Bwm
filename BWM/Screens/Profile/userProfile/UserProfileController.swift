@@ -11,6 +11,9 @@ import NVActivityIndicatorView
 import SwiftyUserDefaults
 import Flurry_iOS_SDK
 import Alamofire
+import AlamofireImage
+import AVKit
+import AVFoundation
 
 protocol UserProfileTabControllerDelegate: class {
     func didChangeContentHeight(_ height: CGFloat)
@@ -46,6 +49,7 @@ class UserProfileController: UIViewController {
     @IBOutlet weak var labelName: UILabel!
     @IBOutlet weak var labelDescription: UILabel!
     
+    @IBOutlet weak var postCollection: UICollectionView!
     @IBOutlet weak var labelPosts: UILabel!
     @IBOutlet weak var labelFollowers: UILabel!
     @IBOutlet private weak var labelTokens: UILabel?
@@ -57,6 +61,8 @@ class UserProfileController: UIViewController {
     let getapiUrl = "http://93.188.167.68/projects/event_app/public/api/v1/accounts/nearByUsers"
     let instaFollow = "https://www.instagram.com/"
     var apiData = [AnyObject]()
+    var postData = [AnyObject]()
+    var m = ""
     private var blurEffectView: UIVisualEffectView?
     private let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
     private var indicator: NVActivityIndicatorView?
@@ -79,9 +85,10 @@ class UserProfileController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupLoadingView()
-        
+        print("xgfggggsgfsgs",m)
         let ab = UserDefaults.standard.value(forKey: "a") as? String
         print(ab)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,7 +124,8 @@ class UserProfileController: UIViewController {
                         let count = follow!.object(forKey: "count") as? Int ?? 0
                         let posDict = user!.object(forKey: "edge_owner_to_timeline_media") as! NSDictionary
                         let post = posDict.object(forKey: "count") as? Int ?? 0
-                        
+                        postData = posDict.object(forKey: "edges") as! [AnyObject]
+//                        self.postCollection.reloadData()
                         print("countttt===",count)
                         labelPosts.text = "\(post)"
                         labelFollowers.text = "\(count)"
@@ -127,6 +135,7 @@ class UserProfileController: UIViewController {
                               if image != ""{
                                                             DispatchQueue.main.async {
                                                                 let url = URL(string: image)
+                                                                print(url!)
                                                                 self.imageAvatar.af_setImage(withURL: url!)
                                                             }
                               }else{
@@ -157,22 +166,26 @@ class UserProfileController: UIViewController {
     }
     //MARK: - Test
     
-    @IBAction private func onTestButton() {
-        //self.tabBarController?.updateChatIcon(hasNewMsg: true)
-        TestPNRequest.fire()
-    }
+//    @IBAction private func onTestButton() {
+//        //self.tabBarController?.updateChatIcon(hasNewMsg: true)
+//        TestPNRequest.fire()
+//    }
     
     //MARK: - Navigation
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        
-        if identifier == R.segue.userProfileController.userProfileEdit.identifier {
-            return self.user != nil
-        }
-        
-        return true
-    }
+//    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+//
+//        if identifier == R.segue.userProfileController.userProfileEdit.identifier {
+//            return self.user != nil
+//        }
+//
+//        return true
+//    }
     
+    @IBAction func editProfileTapped(_ sender: Any) {
+        let vc = storyboard?.instantiateViewController(withIdentifier: "EditProfileVC") as! EditProfileVC
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navController = segue.destination as? UINavigationController,
             let screen = navController.viewControllers.first as? SignUpNameController {
@@ -377,6 +390,9 @@ class UserProfileController: UIViewController {
     }
 }
 
+class PostCollectionCell: UICollectionViewCell{
+    @IBOutlet weak var postImage: UIImageView!
+}
 extension UserProfileController: SelectorComponentViewDelegate {
     func selectedButtonWithIndex(_ index: Int) {
         let type = self.tabTypes[index]
@@ -426,4 +442,63 @@ extension UserProfileController: UIPageViewControllerDataSource {
         let nextType = self.tabTypes[currentTabIndex+1]
         return self.itemForType(nextType)
     }
+}
+
+extension UserProfileController: UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return postData.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = postCollection.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PostCollectionCell
+        if postData.count != 0{
+            let index = postData[indexPath.row]["node"] as! NSDictionary
+           // let node = index.object(forKey: "") as! NSDictionary
+    //        let type = index.object(forKey: "__typename") as! String
+            print(index.object(forKey: "display_url") as! String)
+            if let image = index.object(forKey: "display_url") as? String{
+                let url = URL(string: image)
+                m = image
+                cell.postImage.af_setImage(withURL: url!)
+            }
+            return cell
+
+        }else{
+            print("private account")
+            return cell
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: postCollection.frame.width/3, height: postCollection.frame.height/3)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let index = postData[indexPath.row]["node"] as! NSDictionary
+       // let node = index.object(forKey: "") as! NSDictionary
+        let type = index.object(forKey: "__typename") as! String
+        
+        if type == "GraphVideo"{
+            
+            if let video = index.object(forKey: "video_url") as? String{
+                let videoURL = URL(string: video)
+                let player = AVPlayer(url: videoURL!)
+                let playerViewController = AVPlayerViewController()
+                playerViewController.player = player
+                self.present(playerViewController, animated: true) {
+                    playerViewController.player!.play()
+                }
+            }
+           
+        }else{
+            let vc = storyboard?.instantiateViewController(withIdentifier: "PostViewVC") as! PostViewVC
+            if let image = index.object(forKey: "display_url") as? String{
+            
+                vc.image = image
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        
+    }
+    
+    
 }

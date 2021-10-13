@@ -88,7 +88,7 @@ class SigninController: BaseViewController {
 ////                                screen.userInfo = self.userInfo
 //                                self.navigationController?.pushViewController(screen, animated: true)
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(withIdentifier: "Main") as! MainTabbarController
+                                   let vc = storyboard.instantiateViewController(withIdentifier: "Main") as! MainTabbarController
                     vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
                         
@@ -153,8 +153,8 @@ extension SigninController: LoginButtonDelegate {
                             let ok = UIAlertAction.init(title: "Ok", style: .default) { (ok) in
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                                 let vc = storyboard.instantiateViewController(withIdentifier: "Main") as! MainTabbarController
-                                vc.modalPresentationStyle = .fullScreen
-                                self.present(vc, animated: true, completion: nil)
+//                                vc.modalPresentationStyle = .fullScreen
+                                self.navigationController?.pushViewController(vc, animated: true)
                             }
                             alert.addAction(ok)
                             self.present(alert, animated: true, completion: nil)

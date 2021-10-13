@@ -9,9 +9,12 @@
 import UIKit
 import Flurry_iOS_SDK
 import DropDown
+import Alamofire
 
 class AlienInformationController: UserProfileController {
     
+    
+    var username = ""
     //MARK: - Outlets
     @IBOutlet private weak var buttonFavorite: UIButton!
     @IBOutlet private weak var buttonMessage: UIButton!
@@ -35,11 +38,72 @@ class AlienInformationController: UserProfileController {
         
         PurchaseUtils.shared.checkOnScreen(self, sCase: .profile)
         
-        self.updateUserData()
+       // self.updateUserData()
+        getUserData()
     }
     
     
+    // MARK: - API
     
+    func getUserData(){
+        if Reachability.isConnectedToNetwork(){
+
+           
+            Alamofire.request(instaFollow+username+"?__a=1",method: .get,encoding:  JSONEncoding.default).responseJSON{[self]
+                response in
+                switch(response.result){
+
+                case .success(let json):do{
+                    let success = response.response?.statusCode
+                    let respond = json as! NSDictionary
+//                    var abc = ""
+                    if success == 200{
+                        print("found",respond)
+                        let graph = respond.object(forKey: "graphql") as? NSDictionary
+                        let user = graph?.object(forKey: "user") as? NSDictionary
+                        let follow = user!.object(forKey: "edge_followed_by") as? NSDictionary
+                        let count = follow!.object(forKey: "count") as? Int ?? 0
+                        let posDict = user!.object(forKey: "edge_owner_to_timeline_media") as! NSDictionary
+                        let post = posDict.object(forKey: "count") as? Int ?? 0
+                        postData = posDict.object(forKey: "edges") as! [AnyObject]
+//                        self.postCollection.reloadData()
+                        print("countttt===",count)
+                        labelPosts.text = "\(post)"
+                        labelFollowers.text = "\(count)"
+                        labelName.text = user!.object(forKey: "full_name") as? String ?? "Name"
+                        if let image = user!.object(forKey: "profile_pic_url") as? String{
+                         
+                              if image != ""{
+                                                            DispatchQueue.main.async {
+                                                                let url = URL(string: image)
+                                                                self.imageAvatar.af_setImage(withURL: url!)
+                                                            }
+                              }else{
+                                DispatchQueue.main.async {
+                                    let url = URL(string: "http://93.188.167.68/projects/event_app/public/default.jpgg")
+                                    self.imageAvatar.af_setImage(withURL: url!)
+                              }
+                                                
+                        
+                        }
+                        }
+                        UserDefaults.standard.setValue(count, forKey: "follow")
+                        
+                    }else{
+                        self.view.isUserInteractionEnabled = true
+                    }
+                }
+
+                case .failure(let error):do{
+                    print(error)
+                    self.view.isUserInteractionEnabled = true
+                }
+                }
+            }
+        }else{
+            Alerts.showNoConnectionErrorMessage()
+        }
+    }
     //MARK: - Actions
     
     @IBAction private func onMore() {
@@ -155,32 +219,32 @@ class AlienInformationController: UserProfileController {
     
     //MARK: - Overrides
     
-    override func updateUserData() {
-        self.blockSelf()
-        
-        AlienAccountRequest.fire(id: userId) { (account, success) in
-            if success {
-                self.user = account
-                self.isFavorite = self.user?.isFavorite ?? false
-                self.constraintProImageHeight?.constant = account?.isPro == true ? 40.0 : 0.0
-                AlienPhotosRequest.fire(id: self.userId, completion: { (photos) in
-                    self.photos = photos
-                    self.unblockSelf()
-                    
-                    var tabs: [UserProfileTabType] = []
-                    if self.photos.count > 0 || self.user?.locations?.count ?? 0 > 0 {
-                        tabs.append(.about)
-                    }
-                    self.tabTypes = tabs
-                    self.setupPageController()
-                    self.updateUI()
-                })
-            }
-            else {
-                self.unblockSelf()
-            }
-        }
-    }
+//    override func updateUserData() {
+//        self.blockSelf()
+//
+//        AlienAccountRequest.fire(id: userId) { (account, success) in
+//            if success {
+//                self.user = account
+//                self.isFavorite = self.user?.isFavorite ?? false
+//                self.constraintProImageHeight?.constant = account?.isPro == true ? 40.0 : 0.0
+//                AlienPhotosRequest.fire(id: self.userId, completion: { (photos) in
+//                    self.photos = photos
+//                    self.unblockSelf()
+//
+//                    var tabs: [UserProfileTabType] = []
+//                    if self.photos.count > 0 || self.user?.locations?.count ?? 0 > 0 {
+//                        tabs.append(.about)
+//                    }
+//                    self.tabTypes = tabs
+//                    self.setupPageController()
+//                    self.updateUI()
+//                })
+//            }
+//            else {
+//                self.unblockSelf()
+//            }
+//        }
+//    }
     
     override func updateUI() {
         self.buttonMessage.layer.borderColor = UIColor.lightGray.cgColor

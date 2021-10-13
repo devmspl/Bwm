@@ -38,15 +38,7 @@ class SignInRequest: BaseViewController {
                             let abc = respond.object(forKey: "username") as! String
                             UserDefaults.standard.setValue(abc, forKey: "username")
                             print("tokennnnn..\(Defaults[.token] ?? "")")
-    //                        Defaults[.liveTracking] = response.result.value!.settings?.tracking == 1
-    //                        Defaults[.userIsPro] = response.result.value!.isPro ?? false
-    //                        if response.result.value?.isCustomer == true {
-    //                            Defaults[.userType] = "customer"
-    //                        } else {
-    //                            Defaults[.userType] = "freelancer"
-    //                        }
-    //                        Defaults[.verificationCode] = response.result.value!.verificationCode
-                            
+                        
                             completion(true)
                         }
                         else{

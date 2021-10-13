@@ -15,7 +15,7 @@ protocol UserGridControllerDelegate: class {
     func didScroll(toTop: Bool)
 }
 
-class UserGridController: UICollectionViewController {
+class UserGridController: UICollectionViewController,UICollectionViewDelegateFlowLayout {
 
     weak var delegate: UserGridControllerDelegate?
 
@@ -28,9 +28,9 @@ class UserGridController: UICollectionViewController {
     private var topUserIndexes: [Int] = []
     
     private var currentOffset: CGFloat = 0.0
-    let image = [UIImage(named: "a"),UIImage(named: "b"),UIImage(named: "c"),UIImage(named: "d"),UIImage(named: "e")]
-    let follow = ["200 followers","600 followers","400 followers","1500 followers","1K followers"]
-    let verify = [UIImage(named: "Search/badge_off"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_off")]
+//    let image = [UIImage(named: "a"),UIImage(named: "b"),UIImage(named: "c"),UIImage(named: "d"),UIImage(named: "e")]
+//    let follow = ["200 followers","600 followers","400 followers","1500 followers","1K followers"]
+//    let verify = [UIImage(named: "Search/badge_off"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_on"),UIImage(named: "Search/badge_off")]
     override func viewDidLoad() {
         super.viewDidLoad()
         contentFlowLayout.delegate = self
@@ -159,6 +159,8 @@ class UserGridController: UICollectionViewController {
 //        return self.sortedUsers.count
         apiData.count
     }
+    
+    
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.userGridCell.identifier, for: indexPath) as! UserGridCell
@@ -180,6 +182,7 @@ class UserGridController: UICollectionViewController {
                             
     }
         }
+        
 //        cell.layer.shouldRasterize = true;
 //        cell.layer.rasterizationScale = UIScreen.main.scale
 //
@@ -195,7 +198,7 @@ class UserGridController: UICollectionViewController {
 
         return cell
     }
-    
+
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -217,14 +220,15 @@ class UserGridController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
     
-//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        if let screen = R.storyboard.profileBig.alienInformationController(),
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let screen = R.storyboard.profileBig.alienInformationController(){
 //            let userId = self.sortedUsers[indexPath.row].id {
-//            screen.userId = "\(userId)"
-//            Flurry.logEvent("FrontPage_list_selectUser")
-//            self.navigationController?.pushViewController(screen, animated: true)
-//        }
-//    }
+            //screen.userId = "\(userId)"
+            screen.username = apiData[indexPath.item]["username"] as! String
+            Flurry.logEvent("FrontPage_list_selectUser")
+            self.navigationController?.pushViewController(screen, animated: true)
+        }
+    }
 }
 
 extension UserGridController: UserGridLayoutDelegate {

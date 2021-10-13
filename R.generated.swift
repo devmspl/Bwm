@@ -639,7 +639,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 10 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 11 reuse identifiers.
   struct reuseIdentifier {
     /// Reuse identifier `ChatCell`.
     static let chatCell: Rswift.ReuseIdentifier<ChatCell> = Rswift.ReuseIdentifier(identifier: "ChatCell")
@@ -661,6 +661,8 @@ struct R: Rswift.Validatable {
     static let userPhotoGridCell: Rswift.ReuseIdentifier<UserPhotoCell> = Rswift.ReuseIdentifier(identifier: "UserPhotoGridCell")
     /// Reuse identifier `UserPhotoListCell`.
     static let userPhotoListCell: Rswift.ReuseIdentifier<UserPhotoCell> = Rswift.ReuseIdentifier(identifier: "UserPhotoListCell")
+    /// Reuse identifier `cell`.
+    static let cell: Rswift.ReuseIdentifier<PostCollectionCell> = Rswift.ReuseIdentifier(identifier: "cell")
     
     fileprivate init() {}
   }
@@ -775,14 +777,12 @@ struct R: Rswift.Validatable {
       fileprivate init() {}
     }
     
-    /// This struct is generated for `UserProfileController`, and contains static references to 3 segues.
+    /// This struct is generated for `UserProfileController`, and contains static references to 2 segues.
     struct userProfileController {
       /// Segue identifier `showSubscription`.
       static let showSubscription: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, UserProfileController, UIKit.UINavigationController> = Rswift.StoryboardSegueIdentifier(identifier: "showSubscription")
       /// Segue identifier `showTokens`.
       static let showTokens: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, UserProfileController, UIKit.UINavigationController> = Rswift.StoryboardSegueIdentifier(identifier: "showTokens")
-      /// Segue identifier `userProfileEdit`.
-      static let userProfileEdit: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, UserProfileController, UIKit.UINavigationController> = Rswift.StoryboardSegueIdentifier(identifier: "userProfileEdit")
       
       /// Optionally returns a typed version of segue `showSubscription`.
       /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
@@ -796,13 +796,6 @@ struct R: Rswift.Validatable {
       /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
       static func showTokens(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, UserProfileController, UIKit.UINavigationController>? {
         return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.userProfileController.showTokens, segue: segue)
-      }
-      
-      /// Optionally returns a typed version of segue `userProfileEdit`.
-      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
-      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
-      static func userProfileEdit(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, UserProfileController, UIKit.UINavigationController>? {
-        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.userProfileController.userProfileEdit, segue: segue)
       }
       
       fileprivate init() {}
@@ -1169,7 +1162,9 @@ struct _R: Rswift.Validatable {
       let alienInformationController = StoryboardViewControllerResource<AlienInformationController>(identifier: "AlienInformationController")
       let alienProfileNavigation = StoryboardViewControllerResource<UIKit.UINavigationController>(identifier: "AlienProfileNavigation")
       let bundle = R.hostingBundle
+      let editProfileVC = StoryboardViewControllerResource<EditProfileVC>(identifier: "EditProfileVC")
       let name = "ProfileBig"
+      let postViewVC = StoryboardViewControllerResource<PostViewVC>(identifier: "PostViewVC")
       let subscriptionNavController = StoryboardViewControllerResource<UIKit.UINavigationController>(identifier: "subscriptionNavController")
       let subscriptionsController = StoryboardViewControllerResource<SubscriptionsController>(identifier: "SubscriptionsController")
       let tokenPurchaseController = StoryboardViewControllerResource<TokenPurchaseController>(identifier: "TokenPurchaseController")
@@ -1184,6 +1179,14 @@ struct _R: Rswift.Validatable {
       
       func alienProfileNavigation(_: Void = ()) -> UIKit.UINavigationController? {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: alienProfileNavigation)
+      }
+      
+      func editProfileVC(_: Void = ()) -> EditProfileVC? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: editProfileVC)
+      }
+      
+      func postViewVC(_: Void = ()) -> PostViewVC? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: postViewVC)
       }
       
       func subscriptionNavController(_: Void = ()) -> UIKit.UINavigationController? {
@@ -1238,7 +1241,9 @@ struct _R: Rswift.Validatable {
         if UIKit.UIImage(named: "Common/markerIcon") == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'Common/markerIcon' is used in storyboard 'ProfileBig', but couldn't be loaded.") }
         if UIKit.UIImage(named: "Common/cellEnclosure") == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'Common/cellEnclosure' is used in storyboard 'ProfileBig', but couldn't be loaded.") }
         if UIKit.UIImage(named: "Profile/commentsIcon") == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'Profile/commentsIcon' is used in storyboard 'ProfileBig', but couldn't be loaded.") }
+        if _R.storyboard.profileBig().postViewVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'postViewVC' could not be loaded from storyboard 'ProfileBig' as 'PostViewVC'.") }
         if _R.storyboard.profileBig().subscriptionNavController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'subscriptionNavController' could not be loaded from storyboard 'ProfileBig' as 'UIKit.UINavigationController'.") }
+        if _R.storyboard.profileBig().editProfileVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'editProfileVC' could not be loaded from storyboard 'ProfileBig' as 'EditProfileVC'.") }
         if _R.storyboard.profileBig().tokenPurchaseController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'tokenPurchaseController' could not be loaded from storyboard 'ProfileBig' as 'TokenPurchaseController'.") }
         if _R.storyboard.profileBig().userSettingsController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'userSettingsController' could not be loaded from storyboard 'ProfileBig' as 'UserSettingsController'.") }
         if _R.storyboard.profileBig().alienInformationController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'alienInformationController' could not be loaded from storyboard 'ProfileBig' as 'AlienInformationController'.") }

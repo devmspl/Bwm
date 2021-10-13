@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0466521D27142347007FA7B9 /* PostViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466521C27142347007FA7B9 /* PostViewVC.swift */; };
+		0466521F2716B837007FA7B9 /* EditProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466521E2716B836007FA7B9 /* EditProfileVC.swift */; };
 		3576D2951F2C7CBF3A6A1A5E /* Pods_BWM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF9B8004D40CC359F1D03960 /* Pods_BWM.framework */; };
 		C504B2A02141A53C00EB8589 /* UploadReceiptRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C504B29F2141A53C00EB8589 /* UploadReceiptRequest.swift */; };
 		C5224ADE217E3101002F7CD8 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5224ADD217E3101002F7CD8 /* UserProfileController.swift */; };
@@ -171,6 +173,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0466521C27142347007FA7B9 /* PostViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewVC.swift; sourceTree = "<group>"; };
+		0466521E2716B836007FA7B9 /* EditProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileVC.swift; sourceTree = "<group>"; };
 		92943C8D5A8119879FCA1C68 /* Pods-BWM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BWM.release.xcconfig"; path = "Pods/Target Support Files/Pods-BWM/Pods-BWM.release.xcconfig"; sourceTree = "<group>"; };
 		C504B29F2141A53C00EB8589 /* UploadReceiptRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadReceiptRequest.swift; sourceTree = "<group>"; };
 		C5224ADD217E3101002F7CD8 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
@@ -561,6 +565,7 @@
 				C5A8E2C9217F8FA000AAE7E8 /* PhotoModeReusableView.xib */,
 				C5A8E2CE217F934E00AAE7E8 /* UserPhotoCell.swift */,
 				C5C36272219B218C00102FFA /* LocationHeaderReusableView.swift */,
+				0466521C27142347007FA7B9 /* PostViewVC.swift */,
 			);
 			path = cells;
 			sourceTree = "<group>";
@@ -622,6 +627,7 @@
 			children = (
 				EE114D6D2115CE8300A2C6A9 /* UIColor+colorFromHex.swift */,
 				EE114D432115CE7800A2C6A9 /* Classes */,
+				0466521E2716B836007FA7B9 /* EditProfileVC.swift */,
 			);
 			path = Graph;
 			sourceTree = "<group>";
@@ -1171,6 +1177,7 @@
 				C57AA54B2188D9DC0038FA59 /* UserSearchController.swift in Sources */,
 				EECA86872103CAE500AD4E3A /* ResetPasswordController.swift in Sources */,
 				EECA868C2103CD2E00AD4E3A /* BWMFlatTextField.swift in Sources */,
+				0466521D27142347007FA7B9 /* PostViewVC.swift in Sources */,
 				EE114D8E2115CFC800A2C6A9 /* BarPlot.swift in Sources */,
 				EECA86862103CAE500AD4E3A /* CreateNewPasswordController.swift in Sources */,
 				C5A8E2CA217F8FA000AAE7E8 /* PhotoModeReusableView.swift in Sources */,
@@ -1231,6 +1238,7 @@
 				C56549F021BBDA50004F9ACB /* UpdateSettingsRequest.swift in Sources */,
 				EE315C2620FD08390032FD62 /* Int.swift in Sources */,
 				EECA86952103CDDA00AD4E3A /* String.swift in Sources */,
+				0466521F2716B837007FA7B9 /* EditProfileVC.swift in Sources */,
 				C5B4A98B2176498D00ECF7AA /* SignUpEmailController.swift in Sources */,
 				C5A8E2D2217F9FB700AAE7E8 /* SelectorComponent.swift in Sources */,
 				C5B88EAC213467EF00188A8E /* LocationManager.swift in Sources */,
