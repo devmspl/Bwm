@@ -2304,6 +2304,10 @@
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="MZG-pY-ecT" id="PsN-UC-yew"/>
+                                                    <outlet property="delegate" destination="MZG-pY-ecT" id="Jam-1O-Z6t"/>
+                                                </connections>
                                             </collectionView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3063,7 +3067,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sGv-4v-nmH">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="925"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Common/gradient" translatesAutoresizingMaskIntoConstraints="NO" id="gTA-0T-5Bm">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Common/gradient" translatesAutoresizingMaskIntoConstraints="NO" id="gTA-0T-5Bm">
                                                         <rect key="frame" x="0.0" y="3" width="375" height="1200"/>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Last Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xC-TB-pL5">
@@ -3185,7 +3189,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="snD-6n-ZzW">
                                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="40"/>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title=" "/>
                                                                 <connections>
                                                                     <action selector="gender:" destination="OOv-rn-PUd" eventType="touchUpInside" id="BkL-s6-tUS"/>
                                                                 </connections>
@@ -3215,7 +3219,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lxd-r5-FWC">
                                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="40"/>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title=" "/>
                                                                 <connections>
                                                                     <action selector="ethnicity:" destination="OOv-rn-PUd" eventType="touchUpInside" id="wGh-3B-78y"/>
                                                                 </connections>
@@ -3251,9 +3255,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oA2-Yk-evj">
                                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="40"/>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain">
-                                                                    <attributedString key="attributedTitle"/>
-                                                                </buttonConfiguration>
+                                                                <buttonConfiguration key="configuration" style="plain" title=" "/>
                                                                 <connections>
                                                                     <action selector="categoryTapped:" destination="OOv-rn-PUd" eventType="touchUpInside" id="tMx-SV-RFc"/>
                                                                 </connections>
@@ -3384,7 +3386,7 @@
                                                     <constraint firstItem="IVA-k9-fIY" firstAttribute="leading" secondItem="sXu-fb-7VS" secondAttribute="leading" id="DHv-LR-YwT"/>
                                                     <constraint firstItem="QBR-SQ-4tx" firstAttribute="height" secondItem="m34-Pd-Kpy" secondAttribute="height" id="DtQ-dv-1wi"/>
                                                     <constraint firstItem="ZkI-00-tDN" firstAttribute="height" secondItem="weD-RF-lhD" secondAttribute="height" multiplier="2" id="FW8-ll-gxT"/>
-                                                    <constraint firstAttribute="bottom" secondItem="gTA-0T-5Bm" secondAttribute="bottom" id="HAa-2q-bmh"/>
+                                                    <constraint firstAttribute="bottom" secondItem="gTA-0T-5Bm" secondAttribute="bottom" constant="-278" id="HAa-2q-bmh"/>
                                                     <constraint firstItem="owm-mu-ZQS" firstAttribute="leading" secondItem="m34-Pd-Kpy" secondAttribute="leading" id="Hdz-Oh-AJH"/>
                                                     <constraint firstItem="weD-RF-lhD" firstAttribute="leading" secondItem="2Qo-Sy-q1m" secondAttribute="leading" id="I2T-JC-psq"/>
                                                     <constraint firstAttribute="trailing" secondItem="Lmv-NE-HCL" secondAttribute="trailing" constant="40" id="II6-HZ-GPu"/>
@@ -3445,7 +3447,7 @@
                                                     <constraint firstItem="QBR-SQ-4tx" firstAttribute="leading" secondItem="m34-Pd-Kpy" secondAttribute="leading" id="w5v-Ai-y47"/>
                                                     <constraint firstItem="l6H-bo-zMz" firstAttribute="top" secondItem="lUQ-bN-4zF" secondAttribute="bottom" constant="10" id="xAr-ev-EZr"/>
                                                     <constraint firstItem="lUQ-bN-4zF" firstAttribute="top" secondItem="owm-mu-ZQS" secondAttribute="bottom" constant="10" id="xP7-EC-AWv"/>
-                                                    <constraint firstItem="gTA-0T-5Bm" firstAttribute="top" secondItem="sGv-4v-nmH" secondAttribute="top" id="zQH-fO-gyx"/>
+                                                    <constraint firstItem="gTA-0T-5Bm" firstAttribute="top" secondItem="sGv-4v-nmH" secondAttribute="top" constant="3" id="zQH-fO-gyx"/>
                                                 </constraints>
                                             </view>
                                         </subviews>

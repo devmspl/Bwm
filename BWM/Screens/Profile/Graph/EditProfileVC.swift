@@ -63,19 +63,19 @@ class EditProfileVC: UIViewController,UITextFieldDelegate {
                             userName.text = data.object(forKey: "username") as? String ?? ""
                             firstName.text = data.object(forKey: "firstName") as? String ?? ""
                             lastName.text = data.object(forKey: "lastName") as? String ?? ""
-//                            aboutMe.text = data.object(forKey: "about") as? String ?? ""
-//                            ethnicity.text = data.object(forKey: "ethnicityId") as? String ?? ""
-//                            category.text = data.object(forKey: "categoryId") as? String ?? ""
-//                            dob.text = data.object(forKey: "birthDate") as? String ?? ""
+                            aboutMe.text = data.object(forKey: "about") as? String ?? ""
+                            ethnicity.text = data.object(forKey: "ethnicityId") as? String ?? ""
+                            category.text = data.object(forKey: "categoryId") as? String ?? ""
+                            dob.text = data.object(forKey: "birthDate") as? String ?? ""
                             email.text = data.object(forKey: "email") as? String ?? ""
-//                           let gen = data.object(forKey: "gender") as! String
-//
-//                            if gen == "0"{
-//                                gender.text = "Guy"
-//                            }else{
-//                                gender.text = "Girl"
-//                            }
-//                            city.text = data.object(forKey: "address") as? String ?? ""
+                           let gen = data.object(forKey: "gender") as! String
+
+                            if gen == "0"{
+                                gender.text = "Guy"
+                            }else{
+                                gender.text = "Girl"
+                            }
+                            city.text = data.object(forKey: "address") as? String ?? ""
 //
                         }else{
                             Alerts.showCustomErrorMessage(title: "BWM", message: message, button: "OK")
@@ -114,8 +114,8 @@ class EditProfileVC: UIViewController,UITextFieldDelegate {
                                        "lastName": lastName.text!,
                                        "email":email.text!,
                                        "about": aboutMe.text!,
-//                                       "ethnicityId":ethnicity.text!,
-//                                       "categoryId":category.text!,
+                                       "ethnicityId":ethnicity.text!,
+                                       "categoryId":category.text!,
                                        "birthDate":dob.text!,
 //                                       "isCustomer":"0",
                                        "gender":g,
