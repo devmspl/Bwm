@@ -17,7 +17,7 @@ class AlienInformationController: BaseViewController,UICollectionViewDelegate,UI
     
     
     var username = ""
-    let instaFollow = ""
+    let instaFollow = "https://www.instagram.com/"
     var postData = [AnyObject]()
     //MARK: - Outlets
     @IBOutlet weak var postCount: UILabel!
@@ -76,7 +76,7 @@ class AlienInformationController: BaseViewController,UICollectionViewDelegate,UI
                         let posDict = user!.object(forKey: "edge_owner_to_timeline_media") as! NSDictionary
                         let post = posDict.object(forKey: "count") as? Int ?? 0
                         postData = posDict.object(forKey: "edges") as! [AnyObject]
-//                        self.postCollection.reloadData()
+                        self.collectionPost.reloadData()
                         print("countttt===",count)
                         postCount.text = "\(post)"
                         followerCount.text = "\(count)"
@@ -309,8 +309,19 @@ class AlienInformationController: BaseViewController,UICollectionViewDelegate,UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionPost.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollecionPostCell
         if let image = postData[indexPath.item]["display_url"] as? String{
-            let url = URL(string: image)
-            cell.imagePost.af_setImage(withURL: url!)
+            if image != ""{
+                                          DispatchQueue.main.async {
+                                              let url = URL(string: image)
+                                              cell.imagePost.af_setImage(withURL: url!)
+                                          }
+            }else{
+              DispatchQueue.main.async {
+                  let url = URL(string: "http://93.188.167.68/projects/event_app/public/default.jpgg")
+                  cell.imagePost.af_setImage(withURL: url!)
+            }
+                              
+      
+      }
         }
         return cell
     }

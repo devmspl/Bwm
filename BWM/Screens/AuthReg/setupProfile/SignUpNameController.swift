@@ -218,12 +218,12 @@ class SignUpNameController: BaseViewController {
                                       "lastName":fieldLast.text!,
                                       "birthDate":"12/10/2021",
                                       "gender":"0",
-                                      "ethnicityId":"2312341",
-                                      "categoryId" :"gewrger",
+                                      "ethnicityId":"Select",
+                                      "categoryId" :"Select",
                                       "longitude":"77.6808",
                                       "latitude":"30.7369",
-                                      "address":"abc Street",
-                                      "about":"BMW owner",
+                                      "address":"Select",
+                                      "about":"Select",
                                       "followers":count,
                                       "profile_picture": imgUrlpic]
             print("para",para)
