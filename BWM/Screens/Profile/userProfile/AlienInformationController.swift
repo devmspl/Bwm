@@ -10,16 +10,26 @@ import UIKit
 import Flurry_iOS_SDK
 import DropDown
 import Alamofire
+import AlamofireImage
 
-class AlienInformationController: UserProfileController {
+class AlienInformationController: BaseViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+    
     
     
     var username = ""
+    let instaFollow = ""
+    var postData = [AnyObject]()
     //MARK: - Outlets
+    @IBOutlet weak var postCount: UILabel!
+    @IBOutlet weak var followerCount: UILabel!
+    @IBOutlet weak var labelName: UILabel!
+    @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet private weak var buttonFavorite: UIButton!
     @IBOutlet private weak var buttonMessage: UIButton!
     
-    @IBOutlet private weak var constraintProImageHeight: NSLayoutConstraint?
+    @IBOutlet weak var buttonPro: UIImageView!
+    @IBOutlet weak var collectionPost: UICollectionView!
+//    @IBOutlet private weak var constraintProImageHeight: NSLayoutConstraint?
     
     //MARK: - Properties
     private var user: AlienAccount?
@@ -27,9 +37,9 @@ class AlienInformationController: UserProfileController {
     
     var userId: String!
     
-    override var isCurrentUserProfile: Bool {
-        return false
-    }
+//    override var isCurrentUserProfile: Bool {
+//        return false
+//    }
     
     //MARK: -
     
@@ -68,20 +78,20 @@ class AlienInformationController: UserProfileController {
                         postData = posDict.object(forKey: "edges") as! [AnyObject]
 //                        self.postCollection.reloadData()
                         print("countttt===",count)
-                        labelPosts.text = "\(post)"
-                        labelFollowers.text = "\(count)"
+                        postCount.text = "\(post)"
+                        followerCount.text = "\(count)"
                         labelName.text = user!.object(forKey: "full_name") as? String ?? "Name"
                         if let image = user!.object(forKey: "profile_pic_url") as? String{
                          
                               if image != ""{
                                                             DispatchQueue.main.async {
                                                                 let url = URL(string: image)
-                                                                self.imageAvatar.af_setImage(withURL: url!)
+                                                                self.profilePic.af_setImage(withURL: url!)
                                                             }
                               }else{
                                 DispatchQueue.main.async {
                                     let url = URL(string: "http://93.188.167.68/projects/event_app/public/default.jpgg")
-                                    self.imageAvatar.af_setImage(withURL: url!)
+                                    self.profilePic.af_setImage(withURL: url!)
                               }
                                                 
                         
@@ -246,50 +256,69 @@ class AlienInformationController: UserProfileController {
 //        }
 //    }
     
-    override func updateUI() {
-        self.buttonMessage.layer.borderColor = UIColor.lightGray.cgColor
-        self.buttonMessage.layer.borderWidth = 1.0
-        
-        if let user = self.user {
-            if let urlstring = user.avatarMedia?.thumbs?.x200 {
-                let url = URL(string: urlstring)
-                
-                self.imageAvatar.kf.setImage(with: url, placeholder: R.image.profile.photoPlaceholder(), options: [.transition(.fade(0.35))], progressBlock: nil, completionHandler: nil)
-            }
-            self.title = self.user?.category?.name
-            self.imageAvatar.layer.borderColor = UIColor.lightGray.cgColor
-            self.imageAvatar.layer.borderWidth = 1.0
-            let name = user.hasContact ? user.fullName : user.firstName
-            labelName.text = name
-            labelPosts.text = user.postCount?.roundedString
-            labelFollowers.text = user.followerCount?.roundedString
-            labelDescription.text = user.shortDescription()
-            
-            self.buttonFavorite.setImage(user.isFavorite ? R.image.profile.heartHL() : R.image.profile.heart_default(), for: .normal)
-            
-            if user.isVerified == true {
-                self.imageConfirmed.image = R.image.search.badge_on()
-            } else {
-                self.imageConfirmed.image = R.image.search.badge_off()
-            }
-        }
+//    override func updateUI() {
+//        self.buttonMessage.layer.borderColor = UIColor.lightGray.cgColor
+//        self.buttonMessage.layer.borderWidth = 1.0
+//
+//        if let user = self.user {
+//            if let urlstring = user.avatarMedia?.thumbs?.x200 {
+//                let url = URL(string: urlstring)
+//
+//                self.imageAvatar.kf.setImage(with: url, placeholder: R.image.profile.photoPlaceholder(), options: [.transition(.fade(0.35))], progressBlock: nil, completionHandler: nil)
+//            }
+//            self.title = self.user?.category?.name
+//            self.imageAvatar.layer.borderColor = UIColor.lightGray.cgColor
+//            self.imageAvatar.layer.borderWidth = 1.0
+//            let name = user.hasContact ? user.fullName : user.firstName
+//            labelName.text = name
+//            labelPosts.text = user.postCount?.roundedString
+//            labelFollowers.text = user.followerCount?.roundedString
+//            labelDescription.text = user.shortDescription()
+//
+//            self.buttonFavorite.setImage(user.isFavorite ? R.image.profile.heartHL() : R.image.profile.heart_default(), for: .normal)
+//
+//            if user.isVerified == true {
+//                self.imageConfirmed.image = R.image.search.badge_on()
+//            } else {
+//                self.imageConfirmed.image = R.image.search.badge_off()
+//            }
+//        }
+//    }
+    
+//    override func itemForType(_ type: UserProfileTabType) -> UIViewController? {
+//        if type == .about {
+//            if let screen = R.storyboard.profileBig.userAboutMeController(),
+//                let user = self.user {
+//                if let locations = user.locations {
+//                    screen.addresses = locations
+//                }
+//                screen.photos = self.photos
+//                screen.userInfo = self.user?.about ?? ""
+//                screen.delegate = self
+//                screen.userImageUrl = self.user?.avatarMedia?.url
+//                return screen
+//            }
+//        }
+//
+//        return nil
+//    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return postData.count
     }
     
-    override func itemForType(_ type: UserProfileTabType) -> UIViewController? {
-        if type == .about {
-            if let screen = R.storyboard.profileBig.userAboutMeController(),
-                let user = self.user {
-                if let locations = user.locations {
-                    screen.addresses = locations
-                }
-                screen.photos = self.photos
-                screen.userInfo = self.user?.about ?? ""
-                screen.delegate = self
-                screen.userImageUrl = self.user?.avatarMedia?.url
-                return screen
-            }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionPost.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollecionPostCell
+        if let image = postData[indexPath.item]["display_url"] as? String{
+            let url = URL(string: image)
+            cell.imagePost.af_setImage(withURL: url!)
         }
-        
-        return nil
+        return cell
     }
+    
+    
+}
+
+class CollecionPostCell: UICollectionViewCell{
+    
+    @IBOutlet weak var imagePost: UIImageView!
 }
