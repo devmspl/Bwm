@@ -125,7 +125,7 @@ class UserProfileController: UIViewController {
                         let posDict = user!.object(forKey: "edge_owner_to_timeline_media") as! NSDictionary
                         let post = posDict.object(forKey: "count") as? Int ?? 0
                         postData = posDict.object(forKey: "edges") as! [AnyObject]
-//                        self.postCollection.reloadData()
+                        self.postCollection.reloadData()
                         print("countttt===",count)
                         labelPosts.text = "\(post)"
                         labelFollowers.text = "\(count)"

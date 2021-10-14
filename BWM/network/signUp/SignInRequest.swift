@@ -33,6 +33,8 @@ class SignInRequest: BaseViewController {
                             Defaults[.token] = respond.object(forKey: "remember_token") as? String ?? ""
                             let lat = respond.object(forKey: "latitude") as? String ?? "30.7369"
                             let long = respond.object(forKey: "longitude") as? String ?? "77.6808"
+                            let userId = respond.object(forKey: "user_id") as? String ?? ""
+                            UserDefaults.standard.setValue(userId, forKey: "userId")
                             UserDefaults.standard.setValue(lat, forKey: "lat")
                             UserDefaults.standard.setValue(long, forKey: "long")
                             let abc = respond.object(forKey: "username") as! String

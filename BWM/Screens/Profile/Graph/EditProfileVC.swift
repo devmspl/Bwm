@@ -28,7 +28,8 @@ class EditProfileVC: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var saveBtn: UIButton!
     
 // MARK: - VARIABLES
-    let url = ""
+    let url = "http://93.188.167.68/projects/event_app/public/api/v1/accounts/update"
+    let getUrl = "http://93.188.167.68/projects/event_app/public/api/v1/accounts/getuser"
     let drop = DropDown()
     var ethnicityId = ["Indigenous peoples","Americans","White people","American Indian group","Black people","Jewish people","Asian Americans","Han Chinese","Dravidian peoples","Puerto Ricans","Hispanic","Mexicans","Asian","European","African","Austrians","British"]
     var categoryId = ["Barber","Fitness Trainer","Artist"]
@@ -36,14 +37,16 @@ class EditProfileVC: UIViewController,UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         dob.delegate = self
+        userName.isUserInteractionEnabled = false
+        getUserApi()
     }
     
-    func saveData(){
+   func getUserApi(){
         if Reachability.isConnectedToNetwork(){
-            let para : [String:Any] = ["firstName": ""]
-            print(para)
-            
-            Alamofire.request(url, method: .put,parameters: para,encoding: JSONEncoding.default).responseJSON{
+//            let username = UserDefaults.standard.value(forKey: "username") as! String
+            let userId = UserDefaults.standard.value(forKey: "userId") as! String
+            let para :[String:Any] = ["user_id":userId]
+            Alamofire.request(getUrl, method: .post,parameters: para,encoding: JSONEncoding.default).responseJSON{ [self]
                 response in
                 
                 switch(response.result){
@@ -52,9 +55,85 @@ class EditProfileVC: UIViewController,UITextFieldDelegate {
                     let success = response.response?.statusCode
                     let respond = json as! NSDictionary
                     if success == 200{
-                        let succes = respond.object(forKey: "success") as! Bool
+                        let succes = respond.object(forKey: "status") as! String
                         let message = respond.object(forKey: "message") as! String
-                        if succes == true{
+                        if succes == "1"{
+                            print("Successssss==",respond)
+                            let data = respond.object(forKey: "profiledata") as! NSDictionary
+                            userName.text = data.object(forKey: "username") as? String ?? ""
+                            firstName.text = data.object(forKey: "firstName") as? String ?? ""
+                            lastName.text = data.object(forKey: "lastName") as? String ?? ""
+//                            aboutMe.text = data.object(forKey: "about") as? String ?? ""
+//                            ethnicity.text = data.object(forKey: "ethnicityId") as? String ?? ""
+//                            category.text = data.object(forKey: "categoryId") as? String ?? ""
+//                            dob.text = data.object(forKey: "birthDate") as? String ?? ""
+                            email.text = data.object(forKey: "email") as? String ?? ""
+//                           let gen = data.object(forKey: "gender") as! String
+//
+//                            if gen == "0"{
+//                                gender.text = "Guy"
+//                            }else{
+//                                gender.text = "Girl"
+//                            }
+//                            city.text = data.object(forKey: "address") as? String ?? ""
+//
+                        }else{
+                            Alerts.showCustomErrorMessage(title: "BWM", message: message, button: "OK")
+                        }
+                        
+                    }else{
+                        self.view.isUserInteractionEnabled = true
+                        Alerts.showCustomErrorMessage(title: "", message: "server error", button: "OK")
+                    }
+                }
+                case .failure(let error):do{
+                    print("errorrrrrrr",error)
+                    self.view.isUserInteractionEnabled = true
+                }
+                }
+            }
+            
+        }else{
+            Alerts.showNoConnectionErrorMessage()
+        }
+    }
+    
+    func saveData(){
+        if Reachability.isConnectedToNetwork(){
+            var g = ""
+            if gender.text == "Guy"{
+                g = "0"
+            }else{
+                g = "1"
+            }
+//            let username = UserDefaults.standard.value(forKey: "username") as! String
+            let userId = UserDefaults.standard.value(forKey: "userId") as! String
+            let para : [String:Any] = ["user_id": userId,
+                                        "username": userName.text!,
+                                       "firstName" : firstName.text!,
+                                       "lastName": lastName.text!,
+                                       "email":email.text!,
+                                       "about": aboutMe.text!,
+//                                       "ethnicityId":ethnicity.text!,
+//                                       "categoryId":category.text!,
+                                       "birthDate":dob.text!,
+//                                       "isCustomer":"0",
+                                       "gender":g,
+                                       "address":city.text!]
+            print(para)
+            
+            Alamofire.request(url, method: .post,parameters: para,encoding: JSONEncoding.default).responseJSON{
+                response in
+                
+                switch(response.result){
+                case .success(let json): do{
+                    print(json)
+                    let success = response.response?.statusCode
+                    let respond = json as! NSDictionary
+                    if success == 200{
+                        let status = respond.object(forKey: "status") as! String
+                        let message = respond.object(forKey: "message") as! String
+                        if status == "1"{
                             print(respond)
                             
                             let alert = UIAlertController.init(title: "BWM", message: message, preferredStyle: .actionSheet)
@@ -105,6 +184,15 @@ class EditProfileVC: UIViewController,UITextFieldDelegate {
         drop.show()
         drop.selectionAction = {[unowned self] (index: Int,item: String) in
             category.text = item
+            
+        }
+    }
+    @IBAction func gender(_ sender: Any) {
+        drop.anchorView = gender
+        drop.dataSource = ["Guy","Girl"]
+        drop.show()
+        drop.selectionAction = {[unowned self] (index: Int,item: String) in
+            gender.text = item
             
         }
     }
